@@ -8,6 +8,8 @@ import com.unincor.sistema.bancario.admin.exceptions.CadastroException;
 import com.unincor.sistema.bancario.admin.model.dao.AgenciaDao;
 import com.unincor.sistema.bancario.admin.model.domain.Agencia;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -45,7 +47,17 @@ public class AgenciaService {
     }
 
     public static void main(String[] args) {
+        //Main para teste:
+        AgenciaService agenciaService = new AgenciaService();
 
+        Agencia agencia = new Agencia(null, "12", "Três Corações", "MG",
+                "Rei Pelé", "468798", "37410000");
+       
+        try {
+            agenciaService.salvarAgencia(agencia);
+        } catch (CadastroException ex) {
+            Logger.getLogger(AgenciaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
