@@ -5,6 +5,7 @@
 package com.unincor.sistema.bancario.admin.model.services;
 
 import com.unincor.sistema.bancario.admin.exceptions.CadastroException;
+import com.unincor.sistema.bancario.admin.model.dao.AgenciaDao;
 import com.unincor.sistema.bancario.admin.model.dao.GerenteDao;
 import com.unincor.sistema.bancario.admin.model.domain.Agencia;
 import com.unincor.sistema.bancario.admin.model.domain.Gerente;
@@ -22,6 +23,11 @@ public class GerenteService {
     private final GerenteDao gerenteDao = new GerenteDao();
 
     public void salvarGerente(Gerente gerente) throws CadastroException {
+
+        if (gerente == null) {
+            throw new CadastroException("Gerente invalido!");
+        }
+
         if (gerente.getNome() == null || gerente.getNome().isBlank()) {
             throw new CadastroException("Gerente não possui nome!");
         }
@@ -46,17 +52,16 @@ public class GerenteService {
     public static void main(String[] args) {
         GerenteService gerenteService = new GerenteService();
 
-        Agencia agencia = new Agencia();
-        agencia.setIdAgencia(5l);
-        
+        var AgenciaDao = new AgenciaDao().buscarAgenciaPorId(5l);
+
         Gerente gerente = new Gerente(null, "Adalberto Costa", "9080999", LocalDate.now(),
-                "adalberto.costa@gmail.com", "359888888888", "980272222", agencia);
+                "adalberto.costa@gmail.com", "359888888888", "980272222", AgenciaDao);
 
         try {
             gerenteService.salvarGerente(gerente);
         } catch (CadastroException ex) {
             Logger.getLogger(GerenteService.class.getName()).log(Level.SEVERE, null, ex);
-        
+
+        }
     }
-}
 }

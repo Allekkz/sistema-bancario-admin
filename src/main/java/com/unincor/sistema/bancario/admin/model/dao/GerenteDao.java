@@ -6,6 +6,7 @@ package com.unincor.sistema.bancario.admin.model.dao;
 
 import com.unincor.sistema.bancario.admin.configurations.MySQL;
 import com.unincor.sistema.bancario.admin.model.domain.Agencia;
+import com.unincor.sistema.bancario.admin.model.dao.AgenciaDao; //x
 import com.unincor.sistema.bancario.admin.model.domain.Gerente;
 import java.sql.Connection;
 import java.sql.Date;
@@ -36,7 +37,11 @@ public class GerenteDao {
             ps.setString(4, Gerente.getEmail());
             ps.setString(5, Gerente.getTelefone());
             ps.setString(6, Gerente.getSenhaHash());
-            ps.setLong(7, Gerente.getAgencia().getIdAgencia());
+            if (Gerente.getAgencia() != null) {
+                ps.setLong(7, Gerente.getAgencia().getIdAgencia());
+            } else {
+                ps.setObject(7, null);
+            }
             ps.execute();
         } catch (SQLException ex) {
             Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +105,7 @@ public class GerenteDao {
         gerente.setSenhaHash(rs.getString("senha_hash"));
 
         //teste:
-        Agencia agencia = new Agencia();
+        Agencia agencia = new AgenciaDao().buscarAgenciaPorId(rs.getLong("id_agencia"));
         agencia.setIdAgencia(rs.getLong("id_agencia"));
         gerente.setAgencia(agencia);
 
@@ -115,7 +120,7 @@ public class GerenteDao {
 //                + " senha_hash: " + c.getSenhaHash()
 //        ));
 
-        var g = gerenteDao.buscarGerentePorId(1l);
+        var g = gerenteDao.buscarGerentePorId(3l);
         System.out.println("Id: " + g.getIdGerente()
                 + " Nome: " + g.getNome());
     }
